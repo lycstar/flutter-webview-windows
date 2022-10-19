@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -510,7 +511,7 @@ class WebviewController extends ValueNotifier<WebviewValue> {
     }
     assert(value.isInitialized);
     return _methodChannel.invokeMethod('setPointerUpdate',
-        [pointer, kind.index, position.dx, position.dy, size, pressure]);
+        [pointer, kind.index, position.dx * window.devicePixelRatio, position.dy * window.devicePixelRatio, size * window.devicePixelRatio, pressure]);
   }
 
   /// Moves the virtual cursor to [position].
@@ -520,7 +521,7 @@ class WebviewController extends ValueNotifier<WebviewValue> {
     }
     assert(value.isInitialized);
     return _methodChannel
-        .invokeMethod('setCursorPos', [position.dx, position.dy]);
+        .invokeMethod('setCursorPos', [position.dx * window.devicePixelRatio, position.dy * window.devicePixelRatio]);
   }
 
   /// Indicates whether the specified [button] is currently down.
@@ -548,7 +549,10 @@ class WebviewController extends ValueNotifier<WebviewValue> {
       return;
     }
     assert(value.isInitialized);
-    return _methodChannel.invokeMethod('setSize', [size.width, size.height]);
+    return _methodChannel.invokeMethod('setSize', [
+      size.width * window.devicePixelRatio,
+      size.height * window.devicePixelRatio
+    ]);
   }
 }
 
